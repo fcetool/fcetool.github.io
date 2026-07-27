@@ -4,99 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firmware Content Extractor | FCE</title>
-    <meta name="description" content="Extract firmware Content directly without downloading the entire ROM.">
-    
+    <meta name="description" content="No need to download the entire Firmware just to get one file. Extract it directly!">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <div class="app-content">
-            <div class="app-header">
+    <div class="app-wrapper">
+        <main class="main-card">
+            <!-- Header -->
+            <header class="app-header">
                 <div class="logo">
-                    <i class="fas fa-microchip"></i>
+                    <img src="logo.png" alt="fcetool logo">
                 </div>
                 <h1 class="title">Firmware Content Extractor</h1>
-                <p class="subtitle">No need to download the entire ROM just to get one file. Extract it directly!</p>
+                <p class="subtitle">No need to download the entire Firmware just to get one file. Extract it directly!</p>
+                <a href="https://github.com/fcetool" target="_blank" rel="noopener" class="opensource-link">
+                    <i class="fab fa-github"></i> github.com/fcetool
+                </a>
+            </header>
+
+            <!-- Form Area -->
+            <form id="extractForm" class="extract-form">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label class="input-label" for="firmwareUrl">Firmware URL</label>
+                        <input 
+                            type="url" 
+                            id="firmwareUrl" 
+                            name="url" 
+                            placeholder="https://example.com/firmware.zip" 
+                            required
+                            class="input-field"
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="targetSelect">Target File</label>
+                        <select id="targetSelect" name="target" required class="select-field">
+                            <option value="" disabled selected>Choose target file...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="submit-btn">
+                    <i class="fas fa-bolt"></i>
+                    <span>Extract Now</span>
+                </button>
+            </form>
+
+            <div id="statusMessage" class="status-message hidden"></div>
+
+            <!-- Download Result Area -->
+            <div id="downloadSection" class="download-section hidden">
+                <div class="download-header">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h3 class="success-title">Ready to Download</h3>
+                    <p class="success-subtitle">File stored permanently on Hugging Face Dataset</p>
+                </div>
+
+                <div class="download-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span id="statusText" class="detail-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Duration</span>
+                        <span id="durationText" class="detail-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Target</span>
+                        <span id="targetText" class="detail-value">-</span>
+                    </div>
+                </div>
+
+                <div class="download-actions">
+                    <a href="#" id="downloadBtn" class="download-btn" target="_blank">
+                        <i class="fas fa-download"></i>
+                        <span>Download File</span>
+                    </a>
+                    <button id="newExtractionBtn" class="new-extraction-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>New Extraction</span>
+                    </button>
+                </div>
             </div>
 
-            <div class="app-main">
-                <form id="extractForm" class="extract-form">
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label class="input-label">Firmware URL</label>
-                            <input 
-                                type="url" 
-                                id="firmwareUrl" 
-                                name="url" 
-                                placeholder="https://example.com/firmware.zip" 
-                                required
-                                class="input-field"
-                            >
-                        </div>
-
-                        <div class="input-group">
-                            <label class="input-label">Target File</label>
-                            <select id="targetSelect" name="target" required class="select-field">
-                                <option value="" disabled selected>Choose target file...</option>
-                            </select>
-                        </div>
+            <!-- Integrated Terminal Widget -->
+            <div class="terminal-widget">
+                <p class="terminal-note-top">
+                    Use CLI for <strong>unsupported files</strong> or <strong>large firmware files</strong> exceeding web limits.
+                </p>
+                <div class="terminal-body">
+                    <div class="terminal-row">
+                        <span class="terminal-prompt">$</span><span id="line1" class="command-text"></span>
                     </div>
-
-                    <button type="submit" id="submitBtn" class="submit-btn">
-                        <i class="fas fa-bolt"></i>
-                        <span>Extract Now</span>
-                    </button>
-                </form>
-
-                <div id="statusMessage" class="status-message hidden"></div>
-
-                <div id="downloadSection" class="download-section hidden">
-                    <div class="download-header">
-                        <div class="success-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3 class="success-title">Ready to Download!</h3>
-                        <p class="success-subtitle">File stored permanently on Hugging Face Dataset</p>
-                    </div>
-
-                    <div class="download-details">
-                        <div class="detail-item">
-                            <span class="detail-label">Status</span>
-                            <span id="statusText" class="detail-value">-</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Duration</span>
-                            <span id="durationText" class="detail-value">-</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Target</span>
-                            <span id="targetText" class="detail-value">-</span>
-                        </div>
-                    </div>
-
-                    <div class="download-actions">
-                        <a href="#" id="downloadBtn" class="download-btn" target="_blank">
-                            <i class="fas fa-download"></i>
-                            <span>Download File</span>
-                        </a>
-                        <button id="newExtractionBtn" class="new-extraction-btn">
-                            <i class="fas fa-plus"></i>
-                            <span>New Extraction</span>
-                        </button>
+                    <div class="terminal-row">
+                        <span class="terminal-prompt">$</span><span id="line2" class="command-text"></span><span class="cursor">|</span>
                     </div>
                 </div>
             </div>
 
-            <div class="app-footer">
-                <div class="footer-links">                   
+            <!-- Footer Credit -->
+            <footer class="card-footer">
+                <div class="developer-tag">
                     <a href="https://offici5l.github.io" target="_blank" rel="noopener">offici5l.github.io</a>
                 </div>
-            </div>
-        </div>
+            </footer>
+        </main>
     </div>
 
     <script src="config.js"></script>
     <script src="script.js"></script>
+    <script src="terminal.js"></script>
 </body>
 </html>
