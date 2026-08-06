@@ -53,6 +53,26 @@ async function handleSubmit(e) {
     setLoading(true);
 
     try {
+        const checkUrl = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.check}?url=${encodeURIComponent(payload.url)}&target=${encodeURIComponent(payload.target)}`;
+        const checkResponse = await fetch(checkUrl);
+        const checkData = await checkResponse.json();
+
+        if (checkResponse.ok && checkData.status === 'found') {
+            handleSuccess({
+                status: 'cached',
+                message: 'File already exists in dataset (from cache)',
+                download_url: checkData.download_url,
+                target: checkData.target,
+                duration_seconds: 0
+            });
+            setLoading(false);
+            return;
+        }
+    } catch (error) {
+        // Cache check failed silently — fall through to the normal extraction request.
+    }
+
+    try {
         const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.extract}`, {
             method: 'POST',
             headers: {
