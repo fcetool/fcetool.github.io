@@ -4,6 +4,7 @@ const SUPPORTED_FILES = ["abl.img", "aop.img", "aop_config.img", "apusys.img", "
 const API_CONFIG = {
     baseUrl: 'https://offici5l-fcetool.hf.space',
     endpoints: {
-        extract: '/extract'
+        extract: '/extract',
+        check: '/check'
     }
 };
