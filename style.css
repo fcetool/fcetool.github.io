@@ -121,6 +121,20 @@ button {
   to { transform: rotate(360deg); }
 }
 
+.gh {
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: -0.02em;
+  color: var(--accent-ink);
+  border-radius: 6px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.gh:active {
+  background: var(--surface);
+}
+
 .hero {
   display: flex;
   flex-direction: column;
@@ -418,23 +432,26 @@ h1 {
   border-color: #dbe4ea;
 }
 
-.frame-tg .frame-head {
-  color: var(--ink);
-  transition: color 0.2s ease;
-}
-
-.frame-tg .frame-head:active {
-  color: var(--accent-ink);
-}
-
 .tg-badge {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   color: #ffffff;
   background: #229ed9;
   border-radius: 50%;
+  transition: transform 0.16s var(--ease);
+}
+
+.tg-badge::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+.tg-badge:active {
+  transform: scale(0.94);
 }
 
 .input-bar {
@@ -454,7 +471,6 @@ h1 {
 }
 
 .frame-term .frame-head {
-  justify-content: space-between;
   border-bottom: 1px solid #1e293b;
 }
 
@@ -470,10 +486,14 @@ h1 {
   border-radius: 50%;
 }
 
-.frame-label {
+.term-comment {
+  padding: 4px 6px 8px;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: -0.02em;
+  line-height: 1.6;
   color: #94a3b8;
+  overflow-wrap: anywhere;
 }
 
 .term-line {
@@ -530,11 +550,42 @@ h1 {
   transition: none;
 }
 
+.frame-term .caret {
+  width: 0.55em;
+  height: 1.15em;
+  background: #e2e8f0;
+}
+
+.typed {
+  transition: color 0.3s ease;
+}
+
+.typed.is-flash {
+  color: var(--accent-ink);
+}
+
+.frame-term .typed.is-flash {
+  color: #93c5fd;
+}
+
+.icon-check {
+  transform-origin: center;
+}
+
+.is-copied .icon-check {
+  animation: tick 0.28s var(--ease);
+}
+
+@keyframes tick {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
 .foot {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 4px 12px;
   margin-top: 40px;
 }
 
@@ -562,9 +613,16 @@ h1 {
 
   .link:hover,
   .foot a:hover,
-  .copy:hover,
-  .frame-tg .frame-head:hover {
+  .copy:hover {
     color: var(--accent-ink);
+  }
+
+  .gh:hover {
+    background: var(--surface);
+  }
+
+  .tg-badge:hover {
+    transform: scale(1.06);
   }
 
   .frame-term .copy:hover {

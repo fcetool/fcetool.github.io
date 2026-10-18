@@ -187,12 +187,16 @@
     var text = label && button.querySelector('span');
     var original = text && text.textContent;
 
+    var line = button.parentElement.querySelector('.typed');
+
     button.classList.add('is-copied');
+    if (line) line.classList.add('is-flash');
     if (text) text.textContent = 'Copied';
     announcer.textContent = 'Copied to clipboard';
 
     setTimeout(function () {
       button.classList.remove('is-copied');
+      if (line) line.classList.remove('is-flash');
       if (text) text.textContent = original;
       announcer.textContent = '';
     }, 1600);
@@ -285,8 +289,9 @@
           return;
         }
 
+        var pause = text.charAt(index) === ' ' ? 45 : 0;
         index += 1;
-        setTimeout(step, 38);
+        setTimeout(step, 30 + Math.random() * 40 + pause);
       }());
     });
   }
